@@ -62,9 +62,7 @@ else:
         #    stream=True,
         #)
 
-        stream = llm.invoke(messages = messages,
-            stream=True
-        )
+        stream = llm.invoke(messages)
         st.write(stream.content)
         
         # Stream the response to the app using `st.write_stream`.
