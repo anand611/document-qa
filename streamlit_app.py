@@ -54,12 +54,11 @@ else:
 
     if uploaded_file and question:
         temp_file = "./temp.pdf"
-           with open(temp_file, "wb") as file:
-               file.write(uploaded_file.getvalue())
-               file_name = uploaded_file.name
-
-           loader = PyPDFLoader(temp_file)
-           documents = loader.load()
+        with open(temp_file, "wb") as file:
+            file.write(uploaded_file.getvalue())
+            file_name = uploaded_file.name
+        loader = PyPDFLoader(temp_file)
+        documents = loader.load()
 
         # Create embeddings for the documents
         embeddings = OpenAIEmbeddings()
