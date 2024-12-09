@@ -59,7 +59,8 @@ else:
 
         stream = client.chat.stream(
             model="ministral-3b-latest",
-            messages = messages
+            messages = messages,
+            stream=True
         )
         
         # Stream the response to the app using `st.write_stream`.
