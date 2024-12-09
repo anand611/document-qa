@@ -8,7 +8,7 @@ from langchain.document_loaders import PyPDFLoader
 # from langchain.llms import MistralAI
 from langchain.vectorstores import FAISS
 
- model = "ministral-3b-latest"
+model = "ministral-3b-latest"
 # Show title and description.
 st.title("📄 Document question answering")
 st.write(
