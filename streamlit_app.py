@@ -126,7 +126,7 @@ else:
 
         # chain=create_retrieval_chain(retriever,question_answer_chain)
         retrievalQA = RetrievalQA.from_llm(llm=llm,retriever = retriever)
-        print(retrievalQA)
+        st.write(retrievalQA)
         # chain.invoke({"input":question})
         
         # Initialize the language model
