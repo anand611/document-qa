@@ -31,14 +31,14 @@ else:
     # client = OpenAI(api_key=openai_api_key)
 
     # Create an mistralAI client.
-    llm = ChatMistralAI(
-        model=model,
-        mistral_api_key=mistralai_api_key,
+    # llm = ChatMistralAI(
+    #    model=model,
+    #    mistral_api_key=mistralai_api_key,
         # streaming=True
         # temperature=0,
         # max_retries=2,
         # other params...
-    )
+    # )
     # client = Mistral(api_key=mistralai_api_key)
 
     # Let the user upload a file via `st.file_uploader`.
@@ -66,7 +66,7 @@ else:
         vectorstore = FAISS.from_documents(documents, embeddings)
 
         # Initialize the language model
-        # llm = MistralAI(model="mistral-7b")
+        llm = MistralAI(model="mistral-7b")
         
         # Create the RetrievalQA chain
         qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
