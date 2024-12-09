@@ -58,7 +58,7 @@ else:
         #)
 
         stream = client.chat.stream(
-            model="mistral-large-latest",
+            model="ministral-3b-latest",
             messages = messages
         )
         
