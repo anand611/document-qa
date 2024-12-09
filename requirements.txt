@@ -1,5 +1,6 @@
 streamlit
 openai
+mistralai 
 langchain
 langchain-community
 langchain-mistralai
