@@ -33,7 +33,7 @@ else:
     llm = ChatMistralAI(
         model="ministral-3b-latest",
         mistral_api_key=mistralai_api_key,
-        streaming=True
+        # streaming=True
         # temperature=0,
         # max_retries=2,
         # other params...
