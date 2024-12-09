@@ -84,10 +84,10 @@ else:
 
         response = vectorstore.similarity_search(query=question)
         # Initialize the language model
-        # llm = MistralAI(model="mistral-7b")
+        llm = ChatMistralAI(model="mistral-7b")
         
         # Create the RetrievalQA chain
-        # qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
+        qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
 
         # Ask a question
         # query = "What is the main topic of the document?"
