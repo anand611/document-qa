@@ -26,7 +26,9 @@ else:
 
     # Create an mistralAI client.
     llm = ChatMistralAI(
-        model="mistral-large-latest",
+        model="ministral-3b-latest",
+        mistral_api_key=mistralai_api_key,
+        streaming=True
         # temperature=0,
         # max_retries=2,
         # other params...
