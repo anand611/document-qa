@@ -9,6 +9,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 # from langchain.llms import MistralAI
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 model = "ministral-3b-latest"
 # Show title and description.
@@ -44,7 +45,7 @@ else:
 
     # Let the user upload a file via `st.file_uploader`.
     uploaded_file = st.file_uploader(
-        "Upload a document (.txt or .md)", type=("pdf","txt", "md")
+        "Upload a document (.pdf/.txt/.md)", type=("pdf","txt", "md")
     )
 
     # Ask the user for a question via `st.text_area`.
@@ -61,20 +62,36 @@ else:
             file_name = uploaded_file.name
         loader = PyPDFLoader(temp_file)
         documents = loader.load()
+        st.markdown(documents)
 
+        # splitting text
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200,add_start_index=True)
+        splitting_text = text_splitter.split_documents(documents=documents)
+        
         # Create embeddings for the documents
         embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)
         vectorstore = FAISS.from_documents(documents, embeddings)
 
+        #  creating embeddings
+        embeddings = MistralAIEmbeddings(model=model,api_key=api_key)
+        
+        content_vectors = embeddings.embed_query(splitted_text)
+        
+        # creating memory vector store.
+        vectorstore = InMemoryVectorStore(embedding=embeddings)
+        
+        vectorstore.add_documents(documents=splitted_text)
+
+        response = vectorstore.similarity_search(query=question)
         # Initialize the language model
         # llm = MistralAI(model="mistral-7b")
         
         # Create the RetrievalQA chain
-        qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
+        # qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
 
         # Ask a question
-        query = "What is the main topic of the document?"
-        response = qa_chain.run(query)
+        # query = "What is the main topic of the document?"
+        # response = qa_chain.run(query)
         
         # Process the uploaded file and question.
         # document = uploaded_file.read().decode()
@@ -93,6 +110,7 @@ else:
         #)
 
         # response = llm.invoke(messages)
+        
         print(response)
         # st.write(response.choices[0].message.content)
         
