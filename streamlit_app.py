@@ -1,7 +1,7 @@
 import streamlit as st
-from openai import OpenAI
+# from openai import OpenAI
 from langchain_mistralai import ChatMistralAI
-from mistralai import Mistral
+# from mistralai import Mistral
 
 # Show title and description.
 st.title("📄 Document question answering")
@@ -26,8 +26,8 @@ else:
     # Create an mistralAI client.
     llm = ChatMistralAI(
         model="mistral-large-latest",
-        temperature=0,
-        max_retries=2,
+        # temperature=0,
+        # max_retries=2,
         # other params...
     )
     # client = Mistral(api_key=mistralai_api_key)
