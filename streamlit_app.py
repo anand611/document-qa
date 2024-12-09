@@ -1,16 +1,24 @@
-import streamlit as st
+
 # from openai import OpenAI
 from langchain_mistralai import ChatMistralAI
 # from mistralai import Mistral
 import os
 from langchain_mistralai import MistralAIEmbeddings
-from langchain_community.document_loaders import PyPDFLoader
+
 # from langchain.llms import MistralAI
-from langchain_community.vectorstores import FAISS
+
 from langchain.chains import RetrievalQA
 # from langchain.llms import MistralAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import InMemoryVectorStore
+
+import streamlit as st
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.vectorstores import FAISS
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_core.prompts import ChatPromptTemplate
+from langchain.chains import create_retrieval_chain
+from langchain_core.vectorstores import VectorStoreRetriever
 
 model = "ministral-3b-latest"
 
@@ -76,8 +84,23 @@ else:
             file_name = uploaded_file.name
         loader = PyPDFLoader(temp_file)
         documents = loader.load()
-        st.markdown(documents)
+        # st.markdown(documents)
+        #######################################################################################################
+        system_prompt = (
+            "Use the given context to answer the question. "
+            "If you don't know the answer, say you don't know. "
+            "Use three sentences maximum and keep the answer concise. "
+            "Context: {context}"
+        )
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", system_prompt),
+                ("human", "{input}"),
+            ]
+        )
 
+        question_answer_chain = create_stuff_documents_chain(llm, prompt)
+        #######################################################################################################
         # splitting text
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200,add_start_index=True)
         splitted_text = text_splitter.split_documents(documents=documents)
@@ -87,7 +110,7 @@ else:
         embeddings,vectorstore = get_embeddings_model(api_key=mistralai_api_key)
 
         #push data to vector store
-        push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_text)
+        vctr_str,idx=push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_text)
         
         # creating vectors
         # content_vectors = embeddings.embed_query(splitted_text)
@@ -98,16 +121,21 @@ else:
 
         # Performing the search in the vector store
         # response = vectorstore.similarity_search(query=question)
+
+        retriever = vctr_str.as_retriever()
+
+        chain=create_retrieval_chain(retriever,question_answer_chain)
+        chain.invoke({"input":question})
         
         # Initialize the language model
-        llm = ChatMistralAI(model="mistral-7b")
+        # llm = ChatMistralAI(model="mistral-7b")
         
         # Create the RetrievalQA chain
-        qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
+        # qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
 
         # Ask a question
-        query = "What is the main topic of the document?"
-        response = qa_chain.ainvoke(query)
+        # query = "What is the main topic of the document?"
+        # response = qa_chain.ainvoke(query)
         
         # Process the uploaded file and question.
         # document = uploaded_file.read().decode()
