@@ -66,7 +66,7 @@ else:
 
         # splitting text
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200,add_start_index=True)
-        splitting_text = text_splitter.split_documents(documents=documents)
+        splitted_text = text_splitter.split_documents(documents=documents)
         
         # Create embeddings for the documents
         embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)        
