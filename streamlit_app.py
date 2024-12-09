@@ -66,7 +66,7 @@ else:
         vectorstore = FAISS.from_documents(documents, embeddings)
 
         # Initialize the language model
-        llm = MistralAI(model="mistral-7b")
+        llm = ChatMistralAI(model="mistral-7b")
         
         # Create the RetrievalQA chain
         qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
