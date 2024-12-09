@@ -32,7 +32,7 @@ else:
     # Create an OpenAI client.
     # client = OpenAI(api_key=openai_api_key)
 
-    # Create an mistralAI client.
+    # Create a mistralAI client.
     llm = ChatMistralAI(
         model=model,
     #    mistral_api_key=mistralai_api_key,
@@ -70,10 +70,10 @@ else:
         
         # Create embeddings for the documents
         embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)
-        vectorstore = FAISS.from_documents(documents, embeddings)
+        # vectorstore = FAISS.from_documents(documents, embeddings)
 
-        #  creating embeddings
-        embeddings = MistralAIEmbeddings(model=model,api_key=api_key)
+        # creating embeddings
+        # embeddings = MistralAIEmbeddings(model=model,api_key=api_key)
         
         content_vectors = embeddings.embed_query(splitted_text)
         
