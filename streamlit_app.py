@@ -78,12 +78,31 @@ else:
     )
 
     if uploaded_file and question:
+        # Step 2: Load and Process the PDF
         temp_file = "./temp.pdf"
         with open(temp_file, "wb") as file:
             file.write(uploaded_file.getvalue())
             file_name = uploaded_file.name
         loader = PyPDFLoader(temp_file)
-        documents = loader.load()
+        docs = loader.load()
+        
+        # Step 3: Split Text into Chunks
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200,add_start_index=True)
+        chunks = text_splitter.split_documents(documents=docs)
+        
+        # Step 4: Create a Vector Store
+        embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)        
+        vector_store = FAISS.from_documents(chunks, embeddings)
+
+        # Step 5: Set Up the Retriever
+        retriever = vector_store.as_retriever()
+
+        # Step 6: Build the Question/Answering System    
+        qa_chain = RetrievalQA(llm=llm, retriever=retriever)
+
+        response = qa_chain.invoke(query)
+        st.write(response)
+        
         # st.markdown(documents)
         #######################################################################################################
         system_prompt = (
@@ -99,18 +118,15 @@ else:
             ]
         )
 
-        question_answer_chain = create_stuff_documents_chain(llm, prompt)
+        # question_answer_chain = create_stuff_documents_chain(llm, prompt)
         #######################################################################################################
-        # splitting text
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200,add_start_index=True)
-        splitted_text = text_splitter.split_documents(documents=documents)
         
         # Create embeddings for the documents
         # embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)        
-        embeddings,vectorstore = get_embeddings_model(api_key=mistralai_api_key)
+        # embeddings,vectorstore = get_embeddings_model(api_key=mistralai_api_key)
 
         #push data to vector store
-        vctr_str,idx=push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_text)
+        # vctr_str,idx=push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_text)
         
         # creating vectors
         # content_vectors = embeddings.embed_query(splitted_text)
@@ -125,9 +141,9 @@ else:
         # retriever = vctr_str.as_retriever()
 
         # chain=create_retrieval_chain(retriever,question_answer_chain)
-        retriever = VectorStoreRetriever(vectorstore=vctr_str)
-        retrievalQA = RetrievalQA.from_llm(llm=llm,retriever = retriever)
-        st.write(retrievalQA.invoke({"input":question}))
+        # retriever = VectorStoreRetriever(vectorstore=vctr_str)
+        # retrievalQA = RetrievalQA.from_llm(llm=llm,retriever = retriever)
+        # st.write(retrievalQA.invoke({"input":question}))
         # chain.invoke({"input":question})
         
         # Initialize the language model
