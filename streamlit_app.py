@@ -24,8 +24,13 @@ else:
     # client = OpenAI(api_key=openai_api_key)
 
     # Create an mistralAI client.
-    # client = ChatMistralAI(model="mistral-large-latest")
-    client = Mistral(api_key=mistralai_api_key)
+    llm = ChatMistralAI(
+        model="mistral-large-latest",
+        temperature=0,
+        max_retries=2,
+        # other params...
+    )
+    # client = Mistral(api_key=mistralai_api_key)
 
     # Let the user upload a file via `st.file_uploader`.
     uploaded_file = st.file_uploader(
@@ -57,13 +62,12 @@ else:
         #    stream=True,
         #)
 
-        stream = client.chat.stream(
-            model="ministral-3b-latest",
-            messages = messages,
+        stream = llm.invoke(messages = messages,
             stream=True
         )
+        st.write(stream.content)
         
         # Stream the response to the app using `st.write_stream`.
         # st.write_stream(stream)
-        for chunk in stream_response:
-            print(chunk.data.choices[0].delta.content)
+        # for chunk in stream_response:
+        #    print(chunk.data.choices[0].delta.content)
