@@ -3,12 +3,12 @@ import streamlit as st
 from langchain_mistralai import ChatMistralAI
 # from mistralai import Mistral
 import os
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_mistralai import MistralAIEmbeddings
 from langchain.document_loaders import PyPDFLoader
 # from langchain.llms import MistralAI
 from langchain.vectorstores import FAISS
 
-
+ model = "ministral-3b-latest"
 # Show title and description.
 st.title("📄 Document question answering")
 st.write(
@@ -31,7 +31,7 @@ else:
 
     # Create an mistralAI client.
     llm = ChatMistralAI(
-        model="ministral-3b-latest",
+        model=model,
         mistral_api_key=mistralai_api_key,
         # streaming=True
         # temperature=0,
@@ -61,7 +61,7 @@ else:
         documents = loader.load()
 
         # Create embeddings for the documents
-        embeddings = OpenAIEmbeddings()
+        embeddings = MistralAIEmbeddings(model=model,api_key=mistralai_api_key)
         vectorstore = FAISS.from_documents(documents, embeddings)
 
         # Initialize the language model
