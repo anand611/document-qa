@@ -89,7 +89,7 @@ else:
 
         # Ask a question
         # query = "What is the main topic of the document?"
-        response = qa_chain.run(question)
+        response = qa_chain.invoke(question)
         
         # Process the uploaded file and question.
         # document = uploaded_file.read().decode()
