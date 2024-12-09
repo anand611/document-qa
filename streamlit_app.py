@@ -10,6 +10,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 # from langchain.llms import MistralAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.vectorstores import InMemoryVectorStore
 
 model = "ministral-3b-latest"
 # Show title and description.
