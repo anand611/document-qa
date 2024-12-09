@@ -55,14 +55,14 @@ else:
     # client = OpenAI(api_key=openai_api_key)
 
     # Create a mistralAI client.
-    llm = ChatMistralAI(
-        model=model,
+    # llm = ChatMistralAI(
+    #    model=model,
     #    mistral_api_key=mistralai_api_key,
         # streaming=True
         # temperature=0,
         # max_retries=2,
         # other params...
-    )
+    # )
     # client = Mistral(api_key=mistralai_api_key)
 
     # Let the user upload a file via `st.file_uploader`.
@@ -79,11 +79,11 @@ else:
 
     if uploaded_file and question:
         # Step 2: Load and Process the PDF
-        temp_file = "./temp.pdf"
-        with open(temp_file, "wb") as file:
-            file.write(uploaded_file.getvalue())
-            file_name = uploaded_file.name
-        loader = PyPDFLoader(temp_file)
+        # temp_file = "./temp.pdf"
+        # with open(temp_file, "wb") as file:
+        #     file.write(uploaded_file.getvalue())
+        #     file_name = uploaded_file.name
+        loader = PyPDFLoader(uploaded_file)
         docs = loader.load()
         
         # Step 3: Split Text into Chunks
