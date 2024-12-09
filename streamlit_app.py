@@ -97,7 +97,8 @@ else:
         # Step 5: Set Up the Retriever
         retriever = vector_store.as_retriever()
 
-        # Step 6: Build the Question/Answering System    
+        # Step 6: Build the Question/Answering System
+        llm = ChatMistralAI(model=model)
         qa_chain = RetrievalQA(llm=llm, retriever=retriever)
 
         response = qa_chain.invoke(query)
