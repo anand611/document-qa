@@ -4,7 +4,7 @@ from langchain_mistralai import ChatMistralAI
 # from mistralai import Mistral
 import os
 from langchain_mistralai import MistralAIEmbeddings
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 # from langchain.llms import MistralAI
 from langchain.vectorstores import faiss
 
