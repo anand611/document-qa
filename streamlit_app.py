@@ -125,7 +125,7 @@ else:
         # retriever = vctr_str.as_retriever()
 
         # chain=create_retrieval_chain(retriever,question_answer_chain)
-        retriever = VectorStoreRetriever(vectorstore=FAISS(vctr_str))
+        retriever = VectorStoreRetriever(vectorstore=vctr_str)
         retrievalQA = RetrievalQA.from_llm(llm=llm,retriever = retriever)
         st.write(retrievalQA)
         # chain.invoke({"input":question})
