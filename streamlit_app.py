@@ -8,6 +8,7 @@ from langchain_community.document_loaders import PyPDFLoader
 # from langchain.llms import MistralAI
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
+from langchain.llms import MistralAI
 
 model = "ministral-3b-latest"
 # Show title and description.
@@ -66,7 +67,7 @@ else:
         vectorstore = FAISS.from_documents(documents, embeddings)
 
         # Initialize the language model
-        llm = ChatMistralAI(model="mistral-7b")
+        llm = MistralAI(model="mistral-7b")
         
         # Create the RetrievalQA chain
         qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
