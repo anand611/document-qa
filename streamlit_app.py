@@ -127,7 +127,7 @@ else:
         # chain=create_retrieval_chain(retriever,question_answer_chain)
         retriever = VectorStoreRetriever(vectorstore=vctr_str)
         retrievalQA = RetrievalQA.from_llm(llm=llm,retriever = retriever)
-        st.write(retrievalQA)
+        st.write(retrievalQA.invoke("input":question))
         # chain.invoke({"input":question})
         
         # Initialize the language model
