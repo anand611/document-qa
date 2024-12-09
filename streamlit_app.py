@@ -79,11 +79,11 @@ else:
 
     if uploaded_file and question:
         # Step 2: Load and Process the PDF
-        # temp_file = "./temp.pdf"
-        # with open(temp_file, "wb") as file:
-        #     file.write(uploaded_file.getvalue())
-        #     file_name = uploaded_file.name
-        loader = PyPDFLoader(uploaded_file)
+        temp_file = "./temp.pdf"
+        with open(temp_file, "wb") as file:
+            file.write(uploaded_file.getvalue())
+            file_name = uploaded_file.name
+        loader = PyPDFLoader(temp_file)
         docs = loader.load()
         
         # Step 3: Split Text into Chunks
