@@ -69,20 +69,17 @@ else:
         splitting_text = text_splitter.split_documents(documents=documents)
         
         # Create embeddings for the documents
-        embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)
-        # vectorstore = FAISS.from_documents(documents, embeddings)
-
-        # creating embeddings
-        # embeddings = MistralAIEmbeddings(model=model,api_key=api_key)
-        
+        embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)        
+        # creating vectors
         content_vectors = embeddings.embed_query(splitted_text)
-        
         # creating memory vector store.
         vectorstore = InMemoryVectorStore(embedding=embeddings)
-        
+        # adding documents to vector store
         vectorstore.add_documents(documents=splitted_text)
 
-        response = vectorstore.similarity_search(query=question)
+        # Performing the search in the vector store
+        # response = vectorstore.similarity_search(query=question)
+        
         # Initialize the language model
         llm = ChatMistralAI(model="mistral-7b")
         
@@ -91,7 +88,7 @@ else:
 
         # Ask a question
         # query = "What is the main topic of the document?"
-        # response = qa_chain.run(query)
+        response = qa_chain.run(question)
         
         # Process the uploaded file and question.
         # document = uploaded_file.read().decode()
