@@ -4,3 +4,4 @@ mistralai
 langchain
 langchain-community
 langchain-mistralai
+pypdf
