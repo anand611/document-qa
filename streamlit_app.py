@@ -7,6 +7,7 @@ from langchain_mistralai import MistralAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 # from langchain.llms import MistralAI
 from langchain_community.vectorstores import FAISS
+from langchain.chains import RetrievalQA
 
 model = "ministral-3b-latest"
 # Show title and description.
