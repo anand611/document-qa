@@ -124,8 +124,10 @@ else:
 
         retriever = vctr_str.as_retriever()
 
-        chain=create_retrieval_chain(retriever,question_answer_chain)
-        chain.invoke({"input":question})
+        # chain=create_retrieval_chain(retriever,question_answer_chain)
+        retrievalQA = RetrievalQA.from_llm(llm=llm,retriever = retriever)
+        print(retrievalQA)
+        # chain.invoke({"input":question})
         
         # Initialize the language model
         # llm = ChatMistralAI(model="mistral-7b")
