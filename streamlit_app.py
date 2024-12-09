@@ -6,7 +6,7 @@ import os
 from langchain_mistralai import MistralAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 # from langchain.llms import MistralAI
-from langchain.vectorstores import faiss
+from langchain_community.vectorstores import FAISS
 
 model = "ministral-3b-latest"
 # Show title and description.
@@ -62,7 +62,7 @@ else:
 
         # Create embeddings for the documents
         embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)
-        vectorstore = faiss.FAISS.from_documents(documents, embeddings)
+        vectorstore = FAISS.from_documents(documents, embeddings)
 
         # Initialize the language model
         # llm = MistralAI(model="mistral-7b")
