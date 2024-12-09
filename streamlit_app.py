@@ -3,6 +3,11 @@ import streamlit as st
 from langchain_mistralai import ChatMistralAI
 # from mistralai import Mistral
 import os
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.document_loaders import PyPDFLoader
+from langchain.llms import MistralAI
+from langchain.vectorstores import FAISS
+
 
 # Show title and description.
 st.title("📄 Document question answering")
@@ -48,15 +53,36 @@ else:
     )
 
     if uploaded_file and question:
+        temp_file = "./temp.pdf"
+           with open(temp_file, "wb") as file:
+               file.write(uploaded_file.getvalue())
+               file_name = uploaded_file.name
 
+           loader = PyPDFLoader(temp_file)
+           documents = loader.load()
+
+        # Create embeddings for the documents
+        embeddings = OpenAIEmbeddings()
+        vectorstore = FAISS.from_documents(documents, embeddings)
+
+        # Initialize the language model
+        llm = MistralAI(model="mistral-7b")
+        
+        # Create the RetrievalQA chain
+        qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
+
+        # Ask a question
+        query = "What is the main topic of the document?"
+        response = qa_chain.run(query)
+        
         # Process the uploaded file and question.
-        document = uploaded_file.read().decode()
-        messages = [
-            {
+        # document = uploaded_file.read().decode()
+        # messages = [
+        #     {
                 "role": "user",
-                "content": f"Here's a document: {document} \n\n---\n\n {question}",
-            }
-        ]
+        #        "content": f"Here's a document: {document} \n\n---\n\n {question}",
+        #    }
+        # ]
 
         # Generate an answer using the OpenAI API.
         # stream = client.chat.completions.create(
@@ -65,7 +91,7 @@ else:
         #    stream=True,
         #)
 
-        response = llm.invoke(messages)
+        # response = llm.invoke(messages)
         print(response)
         # st.write(response.choices[0].message.content)
         
