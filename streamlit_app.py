@@ -51,14 +51,14 @@ else:
         ]
 
         # Generate an answer using the OpenAI API.
-        stream = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-            stream=True,
-        )
+        # stream = client.chat.completions.create(
+        #    model="gpt-3.5-turbo",
+        #    messages=messages,
+        #    stream=True,
+        #)
 
-        stream= client.chat.stream(
-            model = model,
+        stream = client.chat.stream(
+            model = client,
             messages = messages
         )
         
