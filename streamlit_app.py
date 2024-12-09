@@ -2,6 +2,7 @@ import streamlit as st
 # from openai import OpenAI
 from langchain_mistralai import ChatMistralAI
 # from mistralai import Mistral
+import os
 
 # Show title and description.
 st.title("📄 Document question answering")
@@ -19,7 +20,7 @@ mistralai_api_key = st.text_input("MistralAI API Key", type="password")
 if not mistralai_api_key:
     st.info("Please add your MistralAI API key to continue.", icon="🗝️")
 else:
-
+    os.environ["MISTRAL_API_KEY"] = mistralai_api_key
     # Create an OpenAI client.
     # client = OpenAI(api_key=openai_api_key)
 
