@@ -13,6 +13,19 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.vectorstores import InMemoryVectorStore
 
 model = "ministral-3b-latest"
+
+def get_embeddings_model(model="mistral-embed",api_key=""):
+    if model and api_key:
+        embeddings = MistralAIEmbeddings(model=model,api_key=api_key)
+        vectorstore = InMemoryVectorStore(embedding=embeddings)
+        return embeddings,vectorstore
+    else:
+        return None
+def push_to_vectorstore(vectorstore:InMemoryVectorStore,splitted_text):
+    if vectorstore and splitted_text:
+        ids = vectorstore.add_documents(documents=splitted_text)
+        return vectorstore,ids        
+        
 # Show title and description.
 st.title("📄 Document question answering")
 st.write(
@@ -70,13 +83,18 @@ else:
         splitted_text = text_splitter.split_documents(documents=documents)
         
         # Create embeddings for the documents
-        embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)        
+        # embeddings = MistralAIEmbeddings(model="mistral-embed",api_key=mistralai_api_key)        
+        embeddings,vectorstore = get_embeddings_model(api_key=mistralai_api_key)
+
+        #push data to vector store
+        push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_data)
+        
         # creating vectors
-        content_vectors = embeddings.embed_query(splitted_text)
+        # content_vectors = embeddings.embed_query(splitted_text)
         # creating memory vector store.
-        vectorstore = InMemoryVectorStore(embedding=embeddings)
+        # vectorstore = InMemoryVectorStore(embedding=embeddings)
         # adding documents to vector store
-        vectorstore.add_documents(documents=splitted_text)
+        # vectorstore.add_documents(documents=splitted_text)
 
         # Performing the search in the vector store
         # response = vectorstore.similarity_search(query=question)
@@ -88,8 +106,8 @@ else:
         qa_chain = RetrievalQA(llm=llm, retriever=vectorstore.as_retriever())
 
         # Ask a question
-        # query = "What is the main topic of the document?"
-        response = qa_chain.invoke(question)
+        query = "What is the main topic of the document?"
+        response = qa_chain.ainvoke(query)
         
         # Process the uploaded file and question.
         # document = uploaded_file.read().decode()
