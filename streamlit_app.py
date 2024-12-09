@@ -87,7 +87,7 @@ else:
         embeddings,vectorstore = get_embeddings_model(api_key=mistralai_api_key)
 
         #push data to vector store
-        push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_data)
+        push_to_vectorstore(vectorstore=vectorstore,splitted_text=splitted_text)
         
         # creating vectors
         # content_vectors = embeddings.embed_query(splitted_text)
