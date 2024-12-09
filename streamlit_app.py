@@ -157,7 +157,7 @@ else:
 
         # response = llm.invoke(messages)
         
-        print(response)
+        # print(response)
         # st.write(response.choices[0].message.content)
         
         # Stream the response to the app using `st.write_stream`.
